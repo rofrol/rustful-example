@@ -10,26 +10,26 @@ use std::error::Error;
 use rustful::{Server, Context, Response, TreeRouter};
 
 fn say_hello(context: Context, response: Response) {
-    //Get the value of the path variable `:person`, from below.
+    // Get the value of the path variable `:person`, from below.
     let person = match context.variables.get("person") {
         Some(name) => name,
-        None => "stranger".into()
+        None => "stranger".into(),
     };
 
-    //Use the name from the path variable to say hello.
+    // Use the name from the path variable to say hello.
     response.send(format!("Hello, {}!", person));
 }
 
 fn main() {
     env_logger::init().unwrap();
 
-    //Build and run the server.
+    // Build and run the server.
     let server_result = Server {
-        //Turn a port number into an IPV4 host address (0.0.0.0:8080 in this case).
-        host: 8085.into(),
+            // Turn a port number into an IPV4 host address (0.0.0.0:8080 in this case).
+            host: 8085.into(),
 
-        //Create a TreeRouter and fill it with handlers.
-        handlers: insert_routes!{
+            // Create a TreeRouter and fill it with handlers.
+            handlers: insert_routes!{
             TreeRouter::new() => {
                 //Handle requests for root...
                 Get: say_hello,
@@ -40,12 +40,13 @@ fn main() {
             }
         },
 
-        //Use default values for everything else.
-        ..Server::default()
-    }.run();
+            // Use default values for everything else.
+            ..Server::default()
+        }
+        .run();
 
     match server_result {
-        Ok(_server) => {},
-        Err(e) => error!("could not start server: {}", e.description())
+        Ok(_server) => {}
+        Err(e) => error!("could not start server: {}", e.description()),
     }
 }
