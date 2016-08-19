@@ -1,0 +1,9 @@
+[package]
+name = "rustful-example"
+version = "0.1.0"
+authors = ["Roman Frołow"]
+
+[dependencies]
+rustful = "0.9"
+env_logger = "0.3.4"
+log = "0.3"
