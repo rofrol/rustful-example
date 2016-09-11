@@ -7,3 +7,12 @@ authors = ["Roman Frołow"]
 rustful = "0.9"
 env_logger = "0.3.4"
 log = "0.3"
+hyper = "0.9.10"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
