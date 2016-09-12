@@ -25,6 +25,13 @@ use std::path::Path;
 fn main() {
     env_logger::init().unwrap();
 
+
+    // println!("# Menu");
+    // for node in document.find(Attr("id", "hmenus").descendant(Name("a"))) {
+    //    println!("{} ({:?})", node.text(), node.attr("href").unwrap());
+    // }
+    // println!("");
+
     let client = Client::new();
 
     // error: cannot borrow immutable local variable `res` as mutable
