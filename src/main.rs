@@ -9,12 +9,10 @@ extern crate env_logger;
 extern crate hyper;
 
 use hyper::Url;
-use hyper::client::{Client, Request};
+use hyper::client::Client;
 use hyper::header::Connection;
 
 use std::error::Error;
-
-use rustful::{Server, Context, Response, TreeRouter};
 
 // You'll also need to bring Read into scope to have access to read_to_string
 // http://stackoverflow.com/questions/29214963/unable-to-read-file-contents-to-string-result-does-not-implement-any-method-in
@@ -23,17 +21,6 @@ use rustful::{Server, Context, Response, TreeRouter};
 use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
-
-fn say_hello(context: Context, response: Response) {
-    // Get the value of the path variable `:person`, from below.
-    let person = match context.variables.get("person") {
-        Some(name) => name,
-        None => "stranger".into(),
-    };
-
-    // Use the name from the path variable to say hello.
-    response.send(format!("Hello, {}!", person));
-}
 
 fn main() {
     env_logger::init().unwrap();
@@ -56,7 +43,7 @@ fn main() {
     assert_eq!(res.status, hyper::Ok);
     let mut body = String::new();
     res.read_to_string(&mut body).unwrap();
-    let path = Path::new("thepiratebay.html");
+    let path = Path::new("thepiratebay--top--207.html");
     let display = path.display();
 
     // Open a file in write-only mode, returns `io::Result<File>`
@@ -68,32 +55,5 @@ fn main() {
     match file.write_all(body.as_bytes()) {
         Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
         Ok(_) => println!("successfully wrote to {}", display),
-    }
-
-    // Build and run the server.
-    let server_result = Server {
-            // Turn a port number into an IPV4 host address (0.0.0.0:8080 in this case).
-            host: 8085.into(),
-
-            // Create a TreeRouter and fill it with handlers.
-            handlers: insert_routes!{
-            TreeRouter::new() => {
-                //Handle requests for root...
-                Get: say_hello,
-
-                //...and one level below.
-                //`:person` is a path variable and it will be accessible in the handler.
-                ":person" => Get: say_hello
-            }
-        },
-
-            // Use default values for everything else.
-            ..Server::default()
-        }
-        .run();
-
-    match server_result {
-        Ok(_server) => {}
-        Err(e) => error!("could not start server: {}", e.description()),
     }
 }
